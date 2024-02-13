@@ -6,6 +6,7 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -33,9 +34,13 @@ public class BatchConfig {
     public Step imprimeOlaStep() {
         return stepBuilderFactory
                 .get("imprimeOlaStep")
-                .tasklet((stepContribution, chunkContext) -> {
-                    System.out.println("Olá Mundo!");
-                    return RepeatStatus.FINISHED;
-                }).build();
+                .tasklet(imprimeOlaTasklet("Roberto")).build();
+    }
+
+    private static Tasklet imprimeOlaTasklet(String nome) {
+        return (stepContribution, chunkContext) -> {
+            System.out.printf("Olá, %s!%n%n",nome);
+            return RepeatStatus.FINISHED;
+        };
     }
 }
