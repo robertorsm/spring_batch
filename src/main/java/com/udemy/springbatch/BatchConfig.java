@@ -31,12 +31,9 @@ public class BatchConfig {
     public Step imprimeOlaStep() {
         return stepBuilderFactory
                 .get("imprimeOlaStep")
-                .tasklet(new Tasklet() {
-                    @Override
-                    public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
-                        System.out.println("Olá Mundo!");
-                        return RepeatStatus.FINISHED;
-                    }
+                .tasklet((stepContribution, chunkContext) -> {
+                    System.out.println("Olá Mundo!");
+                    return RepeatStatus.FINISHED;
                 }).build();
     }
 }
