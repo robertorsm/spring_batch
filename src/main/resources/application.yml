@@ -1,0 +1,3 @@
+#Configuração do log4j.
+logging:
+  config: classpath:\log\log4j.xml
