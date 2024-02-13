@@ -5,10 +5,12 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -34,10 +36,12 @@ public class BatchConfig {
     public Step imprimeOlaStep() {
         return stepBuilderFactory
                 .get("imprimeOlaStep")
-                .tasklet(imprimeOlaTasklet("Roberto")).build();
+                .tasklet(imprimeOlaTasklet(null)).build();
     }
 
-    private static Tasklet imprimeOlaTasklet(String nome) {
+    @StepScope
+    @Bean
+    public Tasklet imprimeOlaTasklet(@Value("#{jobParameters['nome']}") String nome) {
         return (stepContribution, chunkContext) -> {
             System.out.printf("Olá, %s!%n%n",nome);
             return RepeatStatus.FINISHED;
